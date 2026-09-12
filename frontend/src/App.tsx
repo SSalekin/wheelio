@@ -14,6 +14,8 @@ function createEmptySession(): WheelSession {
     transcript: [],
     removeOnPick: true,
     expiresAt: 0,
+    imageBase64: null,
+    imageMediaType: null,
   };
 }
 
@@ -159,6 +161,18 @@ export default function App() {
     );
   }, [session.transcript]);
 
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(",")[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
   const handleSubmit = useCallback(
     async (prompt: string, image: File | null) => {
       const userMessage: TranscriptItem = {
@@ -167,14 +181,33 @@ export default function App() {
         text: prompt || "(image)",
       };
 
-      setSession((prev) =>
-        saveSession(
-          { ...prev, transcript: [...prev.transcript, userMessage] },
-          Date.now(),
-        ),
-      );
+      let imageBase64 = session.imageBase64;
+      let imageMediaType = session.imageMediaType;
 
-      if (!image) {
+      if (image) {
+        imageBase64 = await fileToBase64(image);
+        imageMediaType = image.type;
+        setSession((prev) =>
+          saveSession(
+            {
+              ...prev,
+              transcript: [...prev.transcript, userMessage],
+              imageBase64,
+              imageMediaType,
+            },
+            Date.now(),
+          ),
+        );
+      } else {
+        setSession((prev) =>
+          saveSession(
+            { ...prev, transcript: [...prev.transcript, userMessage] },
+            Date.now(),
+          ),
+        );
+      }
+
+      if (!image && !imageBase64) {
         const localEntries = parseSimpleList(prompt);
         if (localEntries) {
           const normalized = normalizeEntries(localEntries);
@@ -185,11 +218,24 @@ export default function App() {
 
       const isClarification = isClarificationResponse();
 
+      let imageToSend = image;
+      if (!imageToSend && isClarification && imageBase64 && imageMediaType) {
+        const byteString = atob(imageBase64);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], { type: imageMediaType });
+        const ext = imageMediaType.includes("png") ? "png" : "jpg";
+        imageToSend = new File([blob], `image.${ext}`, { type: imageMediaType });
+      }
+
       setIsLoading(true);
       try {
         const result = await requestExtraction(
           prompt,
-          image,
+          imageToSend,
           isClarification ? session.transcript : undefined,
         );
 
@@ -213,7 +259,13 @@ export default function App() {
         setIsLoading(false);
       }
     },
-    [applyExtractionResult, isClarificationResponse, session.transcript],
+    [
+      applyExtractionResult,
+      isClarificationResponse,
+      session.transcript,
+      session.imageBase64,
+      session.imageMediaType,
+    ],
   );
 
   const isBusy = isLoading;

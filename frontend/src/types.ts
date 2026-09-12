@@ -12,6 +12,8 @@ export type WheelSession = {
   transcript: TranscriptItem[];
   removeOnPick: boolean;
   expiresAt: number;
+  imageBase64: string | null;
+  imageMediaType: string | null;
 };
 
 export type ExtractionResult =
