@@ -16,6 +16,7 @@ function createEmptySession(): WheelSession {
     expiresAt: 0,
     imageBase64: null,
     imageMediaType: null,
+    faces: [],
   };
 }
 
@@ -242,6 +243,28 @@ export default function App() {
         if (result.kind === "success") {
           const normalized = normalizeEntries(result.entries);
           applyExtractionResult(normalized, result.sourceColumn);
+        } else if (result.kind === "faces") {
+          const faceEntries: Entry[] = result.faces.map((_, i) => ({
+            id: crypto.randomUUID(),
+            value: String(i + 1),
+          }));
+          const systemMessage: TranscriptItem = {
+            id: crypto.randomUUID(),
+            role: "system",
+            text: `Detected ${result.count} faces, added to wheel.`,
+          };
+          setSession((prev) =>
+            saveSession(
+              {
+                ...prev,
+                entries: faceEntries,
+                picks: [],
+                faces: result.faces,
+                transcript: [...prev.transcript, systemMessage],
+              },
+              Date.now(),
+            ),
+          );
         } else {
           const systemMessage: TranscriptItem = {
             id: crypto.randomUUID(),
@@ -272,7 +295,7 @@ export default function App() {
 
   return (
     <main className="app">
-      <h1>Wheelio</h1>
+      <h1>Wheel.io</h1>
       <div className="app-layout">
         <ChatPanel
           transcript={session.transcript}
@@ -284,6 +307,7 @@ export default function App() {
         <WheelPanel
           entries={session.entries}
           picks={session.picks}
+          faces={session.faces}
           removeOnPick={session.removeOnPick}
           isBusy={isBusy}
           onEntriesChange={handleEntriesChange}

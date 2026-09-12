@@ -20,6 +20,7 @@ const PALETTE = [
 interface WheelPanelProps {
   entries: Entry[];
   picks: string[];
+  faces: string[];
   removeOnPick: boolean;
   isBusy: boolean;
   onEntriesChange: (entries: Entry[]) => void;
@@ -30,6 +31,7 @@ interface WheelPanelProps {
 export default function WheelPanel({
   entries,
   picks,
+  faces,
   removeOnPick,
   isBusy,
   onEntriesChange,
@@ -120,7 +122,8 @@ export default function WheelPanel({
       const color = PALETTE[i % PALETTE.length];
 
       let label = null;
-      if (entries.length <= 12) {
+      const showLabels = faces.length > 0 || entries.length <= 12;
+      if (showLabels) {
         const midAngle = ((i + 0.5) * sliceAngle - 90) * (Math.PI / 180);
         const labelRadius = radius * 0.65;
         const lx = center + labelRadius * Math.cos(midAngle);
@@ -199,6 +202,24 @@ export default function WheelPanel({
           </button>
         </div>
 
+        {faces.length > 0 && (
+          <div className="face-grid">
+            <h3>Detected Faces</h3>
+            <div className="face-grid-items">
+              {faces.map((face, i) => (
+                <div key={i} className="face-cell">
+                  <img
+                    src={`data:image/png;base64,${face}`}
+                    alt={`Face ${i + 1}`}
+                    className="face-image"
+                  />
+                  <span className="face-number">{i + 1}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="wheel-editor">
           <h3>Entries</h3>
           {isEditing ? (
@@ -241,11 +262,24 @@ export default function WheelPanel({
           <p className="history-empty">No picks yet</p>
         ) : (
           <ul>
-            {picks.map((value, i) => (
-              <li key={i}>
-                {i + 1}. {value}
-              </li>
-            ))}
+            {picks.map((value, i) => {
+              const faceIdx = parseInt(value, 10) - 1;
+              const hasFace = faces.length > 0 && faceIdx >= 0 && faceIdx < faces.length;
+              return (
+                <li key={i} className="history-item">
+                  <span className="history-rank">{i + 1}.</span>
+                  {hasFace ? (
+                    <img
+                      src={`data:image/png;base64,${faces[faceIdx]}`}
+                      alt={`Face ${value}`}
+                      className="history-face"
+                    />
+                  ) : (
+                    <span className="history-text">{value}</span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
@@ -253,6 +287,7 @@ export default function WheelPanel({
       {showResult && winnerValue !== null && (
         <ResultModal
           value={winnerValue}
+          faces={faces}
           onClose={() => {
             onPick(winnerValue, removeOnPick);
             setShowResult(false);

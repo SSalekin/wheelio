@@ -14,9 +14,11 @@ export type WheelSession = {
   expiresAt: number;
   imageBase64: string | null;
   imageMediaType: string | null;
+  faces: string[];
 };
 
 export type ExtractionResult =
   | { kind: "success"; entries: string[]; sourceColumn?: string }
   | { kind: "clarification"; message: string; availableColumns: string[] }
-  | { kind: "error"; message: string };
+  | { kind: "error"; message: string }
+  | { kind: "faces"; faces: string[]; count: number };

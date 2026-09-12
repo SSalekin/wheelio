@@ -28,4 +28,12 @@ class ErrorResult(BaseModel):
     message: str
 
 
-ExtractionResult = SuccessResult | ClarificationResult | ErrorResult
+class FaceDetectionResult(BaseModel):
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+    kind: Literal["faces"] = "faces"
+    faces: list[str]
+    count: int
+
+
+ExtractionResult = SuccessResult | ClarificationResult | ErrorResult | FaceDetectionResult

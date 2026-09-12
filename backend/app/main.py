@@ -1,8 +1,9 @@
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 
+from app.face_graph import classify_image, detect_faces
 from app.graph import extract_entries
 from app.schemas import ExtractionResult
 from app.validation import validate_upload
@@ -24,6 +25,12 @@ async def api_extract(
         raise HTTPException(status_code=400, detail=str(e))
 
     image_media_type = image.content_type if image_bytes is not None else None
+
+    if image_bytes is not None and image_media_type is not None:
+        has_faces = await classify_image(image_bytes, image_media_type)
+        if has_faces:
+            return await detect_faces(image_bytes, image_media_type)
+
     return await extract_entries(prompt, image_bytes, image_media_type)
 
 

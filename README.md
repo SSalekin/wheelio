@@ -1,6 +1,6 @@
 # Wheelio
 
-A desktop-Chrome random wheel that creates normalized entries from text or a single image and selects them with a smooth, fair animation.
+A desktop-Chrome random wheel that creates normalized entries from text, images, or detected faces and selects them with a smooth, fair animation.
 
 ## Local Setup
 
@@ -14,6 +14,7 @@ cd ../frontend && npm install
 ```bash
 export OPENROUTER_API_KEY="..."
 export OPENROUTER_MODEL="your-vision-capable-openrouter-model"
+export OPENROUTER_FACE_MODEL="your-vision-model-for-face-detection"
 ```
 
 ## Development
@@ -51,6 +52,14 @@ cd backend && .venv/bin/uvicorn app.main:app
 - [ ] Submit an invalid file type (e.g., .txt) → error message shown
 - [ ] Submit a file >2 MiB → error message: "Upload a PNG or JPEG image no larger than 2 MB."
 - [ ] No images are retained on the server
+
+### Face Detection
+- [ ] Submit an image with faces → faces detected, numbered entries added to wheel
+- [ ] Face grid appears in wheel panel showing detected face images
+- [ ] Wheel segments always show numbers when faces are present
+- [ ] Submit an image with no faces → error: "No faces detected. Please upload a different image."
+- [ ] Submit an image with >25 faces → only first 25 detected
+- [ ] New image replaces previous faces on the wheel
 
 ### Configuration Errors
 - [ ] Start with missing `OPENROUTER_API_KEY` → clear configuration error reported
@@ -103,4 +112,4 @@ cd backend && .venv/bin/uvicorn app.main:app
 ## Tech Stack
 
 - **Frontend:** React, TypeScript, Vite, SVG
-- **Backend:** Python 3.12, FastAPI, Pydantic v2, LangChain, LangGraph, OpenRouter
+- **Backend:** Python 3.12, FastAPI, Pydantic v2, LangChain, LangGraph, OpenRouter, Pillow
