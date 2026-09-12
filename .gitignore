@@ -1,6 +1,30 @@
-.venv/
+# Python
 __pycache__/
-.env
-node_modules/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg
 dist/
+build/
+.venv/
+
+# Node
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# Build output
 backend/app/static/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project-specific
+.superpowers/
+docs/
+todo.md
