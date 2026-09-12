@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { requestExtraction } from "./api";
 import ChatPanel from "./components/ChatPanel";
 import ConfirmDialog from "./components/ConfirmDialog";
+import WheelPanel from "./components/WheelPanel";
 import { normalizeEntries, parseSimpleList } from "./lib/entries";
 import { clearSession, loadSession, saveSession } from "./lib/session";
 import type { Entry, TranscriptItem, WheelSession } from "./types";
@@ -96,10 +97,7 @@ export default function App() {
   }, []);
 
   const applyExtractionResult = useCallback(
-    (
-      entries: Entry[],
-      sourceColumn?: string,
-    ) => {
+    (entries: Entry[], sourceColumn?: string) => {
       if (entries.length === 0) {
         const systemMessage: TranscriptItem = {
           id: crypto.randomUUID(),
@@ -193,16 +191,28 @@ export default function App() {
     [applyExtractionResult],
   );
 
+  const isBusy = isLoading;
+
   return (
     <main className="app">
       <h1>Wheelio</h1>
-      <ChatPanel
-        transcript={session.transcript}
-        isLoading={isLoading}
-        isBusy={false}
-        onReset={handleReset}
-        onSubmit={handleSubmit}
-      />
+      <div className="app-layout">
+        <ChatPanel
+          transcript={session.transcript}
+          isLoading={isLoading}
+          isBusy={isBusy}
+          onReset={handleReset}
+          onSubmit={handleSubmit}
+        />
+        <WheelPanel
+          entries={session.entries}
+          picks={session.picks}
+          removeOnPick={session.removeOnPick}
+          isBusy={isBusy}
+          onEntriesChange={handleEntriesChange}
+          onPick={handlePick}
+        />
+      </div>
 
       {pendingReplacement && (
         <ConfirmDialog

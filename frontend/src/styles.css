@@ -12,9 +12,16 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  height: calc(100vh - 8rem);
 }
 
 h1 {
@@ -217,4 +224,277 @@ h1 {
 
 .confirm-ok:hover {
   background: #1976d2;
+}
+
+.wheel-panel {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.wheel-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.wheel-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #333;
+  z-index: 10;
+}
+
+.wheel-label {
+  font-size: 11px;
+  font-weight: 600;
+  fill: #333;
+}
+
+.wheel-empty {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 50%;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.wheel-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.remove-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.remove-checkbox input {
+  cursor: pointer;
+}
+
+.spin-btn {
+  padding: 0.75rem 2rem;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.spin-btn:hover:not(:disabled) {
+  background: #388E3C;
+}
+
+.spin-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.wheel-editor {
+  width: 100%;
+  max-width: 300px;
+}
+
+.wheel-editor h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.editor-area textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.editor-area textarea:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.editor-actions button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.editor-actions button:first-child {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.editor-actions button:last-child {
+  background: #2196f3;
+  color: white;
+}
+
+.editor-hint {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.edit-btn {
+  width: 100%;
+  padding: 0.6rem;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.edit-btn:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.edit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wheel-history {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.wheel-history h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.history-empty {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.wheel-history ul {
+  list-style: none;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.wheel-history li {
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.result-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.result-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+}
+
+.result-modal h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #4CAF50;
+}
+
+.result-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.result-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.result-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.result-close {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.result-close:hover {
+  background: #d0d0d0;
+}
+
+.result-spin-again {
+  background: #4CAF50;
+  color: white;
+}
+
+.result-spin-again:hover:not(:disabled) {
+  background: #388E3C;
+}
+
+.result-spin-again:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }
