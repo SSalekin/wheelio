@@ -17,6 +17,7 @@ node_modules/
 
 # Build output
 backend/app/static/
+frontend/.vite/
 
 # IDE
 .vscode/
