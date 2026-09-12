@@ -42,6 +42,12 @@ export default function App() {
     );
   }, []);
 
+  const handleRemoveOnPickChange = useCallback((removeOnPick: boolean) => {
+    setSession((prev) =>
+      saveSession({ ...prev, removeOnPick }, Date.now()),
+    );
+  }, []);
+
   const handlePick = useCallback((value: string, remove: boolean) => {
     setSession((prev) => {
       const newPicks = [...prev.picks, value];
@@ -210,6 +216,7 @@ export default function App() {
           removeOnPick={session.removeOnPick}
           isBusy={isBusy}
           onEntriesChange={handleEntriesChange}
+          onRemoveOnPickChange={handleRemoveOnPickChange}
           onPick={handlePick}
         />
       </div>

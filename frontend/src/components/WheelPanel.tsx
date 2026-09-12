@@ -23,6 +23,7 @@ interface WheelPanelProps {
   removeOnPick: boolean;
   isBusy: boolean;
   onEntriesChange: (entries: Entry[]) => void;
+  onRemoveOnPickChange: (removeOnPick: boolean) => void;
   onPick: (value: string, remove: boolean) => void;
 }
 
@@ -32,6 +33,7 @@ export default function WheelPanel({
   removeOnPick,
   isBusy,
   onEntriesChange,
+  onRemoveOnPickChange,
   onPick,
 }: WheelPanelProps) {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -182,7 +184,7 @@ export default function WheelPanel({
             <input
               type="checkbox"
               checked={removeOnPick}
-              onChange={() => onEntriesChange([...entries])}
+              onChange={(e) => onRemoveOnPickChange(e.target.checked)}
               disabled={isSpinning || isBusy}
             />
             Remove the picked students from wheel
