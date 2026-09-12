@@ -67,10 +67,9 @@ export default function WheelPanel({
   const handleTransitionEnd = useCallback(() => {
     if (winnerValue === null) return;
 
-    onPick(winnerValue, removeOnPick);
     setShowResult(true);
     setIsSpinning(false);
-  }, [winnerValue, onPick, removeOnPick]);
+  }, [winnerValue]);
 
   const handleApplyEdits = useCallback(() => {
     const lines = editorText.split("\n").filter((l) => l.trim() !== "");
@@ -252,8 +251,12 @@ export default function WheelPanel({
       {showResult && winnerValue !== null && (
         <ResultModal
           value={winnerValue}
-          onClose={() => setShowResult(false)}
+          onClose={() => {
+            onPick(winnerValue, removeOnPick);
+            setShowResult(false);
+          }}
           onSpinAgain={() => {
+            onPick(winnerValue, removeOnPick);
             setShowResult(false);
             handleSpin();
           }}
