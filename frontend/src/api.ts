@@ -1,11 +1,21 @@
-import type { ExtractionResult } from "./types";
+import type { ExtractionResult, TranscriptItem } from "./types";
 
 export async function requestExtraction(
   prompt: string,
   image: File | null,
+  history?: TranscriptItem[],
 ): Promise<ExtractionResult> {
   const formData = new FormData();
-  formData.append("prompt", prompt);
+
+  if (history && history.length > 0) {
+    const historyText = history
+      .map((item) => `${item.role === "user" ? "User" : "System"}: ${item.text}`)
+      .join("\n");
+    formData.append("prompt", `Previous conversation:\n${historyText}\n\nUser: ${prompt}`);
+  } else {
+    formData.append("prompt", prompt);
+  }
+
   if (image) {
     formData.append("image", image);
   }

@@ -146,6 +146,19 @@ export default function App() {
     [session.entries.length],
   );
 
+  const isClarificationResponse = useCallback(() => {
+    const lastSystemMsg = [...session.transcript]
+      .reverse()
+      .find((item) => item.role === "system");
+    if (!lastSystemMsg) return false;
+    const text = lastSystemMsg.text.toLowerCase();
+    return (
+      text.includes("clarif") ||
+      text.includes("specify") ||
+      text.includes("column")
+    );
+  }, [session.transcript]);
+
   const handleSubmit = useCallback(
     async (prompt: string, image: File | null) => {
       const userMessage: TranscriptItem = {
@@ -170,9 +183,15 @@ export default function App() {
         }
       }
 
+      const isClarification = isClarificationResponse();
+
       setIsLoading(true);
       try {
-        const result = await requestExtraction(prompt, image);
+        const result = await requestExtraction(
+          prompt,
+          image,
+          isClarification ? session.transcript : undefined,
+        );
 
         if (result.kind === "success") {
           const normalized = normalizeEntries(result.entries);
@@ -194,7 +213,7 @@ export default function App() {
         setIsLoading(false);
       }
     },
-    [applyExtractionResult],
+    [applyExtractionResult, isClarificationResponse, session.transcript],
   );
 
   const isBusy = isLoading;
