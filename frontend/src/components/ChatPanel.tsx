@@ -60,6 +60,13 @@ export default function ChatPanel({
         {transcript.map((item) => (
           <div key={item.id} className={`chat-message chat-message-${item.role}`}>
             <span className="chat-role">{item.role === "user" ? "You" : "System"}</span>
+            {item.imageBase64 && (
+              <img
+                src={`data:image/png;base64,${item.imageBase64}`}
+                alt="Uploaded"
+                className="chat-thumbnail"
+              />
+            )}
             <p>{item.text}</p>
           </div>
         ))}

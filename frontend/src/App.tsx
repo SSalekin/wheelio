@@ -176,18 +176,22 @@ export default function App() {
 
   const handleSubmit = useCallback(
     async (prompt: string, image: File | null) => {
-      const userMessage: TranscriptItem = {
-        id: crypto.randomUUID(),
-        role: "user",
-        text: prompt || "(image)",
-      };
-
       let imageBase64 = session.imageBase64;
       let imageMediaType = session.imageMediaType;
 
       if (image) {
         imageBase64 = await fileToBase64(image);
         imageMediaType = image.type;
+      }
+
+      const userMessage: TranscriptItem = {
+        id: crypto.randomUUID(),
+        role: "user",
+        text: prompt || (imageBase64 ? "(image)" : ""),
+        imageBase64: imageBase64 ?? undefined,
+      };
+
+      if (image) {
         setSession((prev) =>
           saveSession(
             {
