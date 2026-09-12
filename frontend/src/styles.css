@@ -108,6 +108,14 @@ h1 {
   line-height: 1.5;
 }
 
+.chat-thumbnail {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+}
+
 .chat-input-area {
   border-top: 1px solid #e0e0e0;
   padding: 1rem;

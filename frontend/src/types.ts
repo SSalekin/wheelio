@@ -4,6 +4,7 @@ export type TranscriptItem = {
   id: string;
   role: "user" | "system";
   text: string;
+  imageBase64?: string;
 };
 
 export type WheelSession = {
