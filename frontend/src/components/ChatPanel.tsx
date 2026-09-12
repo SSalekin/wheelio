@@ -5,6 +5,7 @@ interface ChatPanelProps {
   transcript: TranscriptItem[];
   isLoading: boolean;
   isBusy: boolean;
+  onReset: () => void;
   onSubmit: (prompt: string, image: File | null) => void;
 }
 
@@ -12,6 +13,7 @@ export default function ChatPanel({
   transcript,
   isLoading,
   isBusy,
+  onReset,
   onSubmit,
 }: ChatPanelProps) {
   const [prompt, setPrompt] = useState("");
@@ -43,6 +45,17 @@ export default function ChatPanel({
 
   return (
     <div className="chat-panel">
+      <div className="chat-header">
+        <h2>Chat</h2>
+        <button
+          className="reset-btn"
+          onClick={onReset}
+          disabled={isLoading || isBusy}
+        >
+          Reset
+        </button>
+      </div>
+
       <div className="chat-transcript" onScroll={scrollToBottom}>
         {transcript.map((item) => (
           <div key={item.id} className={`chat-message chat-message-${item.role}`}>

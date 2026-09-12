@@ -33,6 +33,40 @@ h1 {
   overflow: hidden;
 }
 
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.chat-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.reset-btn {
+  padding: 0.5rem 1rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.reset-btn:hover:not(:disabled) {
+  background: #d32f2f;
+}
+
+.reset-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
 .chat-transcript {
   flex: 1;
   overflow-y: auto;
@@ -123,4 +157,64 @@ h1 {
 .chat-submit:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-dialog {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+}
+
+.confirm-dialog p {
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.confirm-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.confirm-cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.confirm-cancel:hover {
+  background: #d0d0d0;
+}
+
+.confirm-ok {
+  background: #2196f3;
+  color: white;
+}
+
+.confirm-ok:hover {
+  background: #1976d2;
 }
